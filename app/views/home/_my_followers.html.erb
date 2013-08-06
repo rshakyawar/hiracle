@@ -1,0 +1,25 @@
+<br/><br/>
+Total No. of Followers : <%= @followers.count %>
+<% if !@followers.blank?%>
+	<table >
+		<tr>
+			<th>Number</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Email</th>
+		</tr>
+		<% @followers.each_with_index do |follow, index| %>
+			<% @follower_user = User.find_by_id(follow.user_id) %>
+			<tr>
+				<td><%= index+1 %></td>
+				<td><%= @follower_user.first_name%></td>
+				<td><%= @follower_user.last_name%></td>
+				<td><%= @follower_user.email%></td>	
+			</tr>
+		<%end%>
+	</table>
+<% else%>
+<h3>You are having No followers</h3>
+<%end%>
+<br/>
+<%=  link_to 'Back', home_index_path %>

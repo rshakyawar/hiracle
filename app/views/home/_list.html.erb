@@ -1,0 +1,72 @@
+
+	<table width="100%" >
+		<tr>
+			<td >
+				<div id = "post_show">
+					<%= form_for(@post, :html => { :multipart => true }, :remote => true) do |f| %>
+					  <div class="field">
+					    <%= f.text_area :content, :style=>"height: 65px;" %>
+					  </div>
+					  <div class="actions">
+					    <%= f.submit "Submit Post" %>
+					  </div>
+					<% end %>
+
+					<h3>Listing posts</h3>
+					<div id = "post_show_list">
+						<%= render "post_list" %>
+					</div>
+				</div>
+			</td>
+			<td style="vertical-align: text-top;">
+				<%= link_to "My followers", my_followers_path, :remote=>true %>
+				<%= link_to "My followings", my_followings_path, :remote=>true %>
+
+				<%= form_for(User.new, :url => home_search_path) do  %>
+
+				  <div><br />
+				  <%=text_field_tag :search_parameter,nil,:placeholder=>"Search Keyword"%><%= submit_tag "Search" %></div>
+
+				<% end %>
+				<br/>
+				<div id = "show">
+					<% if !@users.blank?%>
+						<table >
+							<tr>
+								<th>First Name</th>
+								<th>Last Name</th>
+								<th>Email</th>
+								<th>Information</th>
+							</tr>	
+
+							<% @users.each do |user|%>
+								<% @posts = Post.find_all_by_user_id(user.id) %>
+								<tr>
+									<td><%= user.first_name%></td>
+									<td><%= user.last_name%></td>
+									<td><%= user.email%></td>
+									<td><% if !@posts.blank? %>
+											<%@posts.each do |post|%>
+												<%= post.content%>
+												<br/>
+											<%end%>
+										<%end%>
+									</td>
+									<td>	
+										<% if !Followings.find_by_user_id_and_follower_id(current_user, user.id).present?%>
+											<%= link_to("Follow", follow_me_path(user))%>
+										<%else%>
+											<%= link_to("Un Follow", un_follow_me_path(user))%>
+										<%end%>
+									</td>
+								</tr>
+							<%end%>
+						</table>
+					<%else%>
+						<h3> No data found</h3>
+					<%end%>
+				</div>
+			</td>
+		</tr>
+	</table>
+

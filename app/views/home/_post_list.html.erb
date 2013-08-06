@@ -1,0 +1,25 @@
+<table >
+	<% @posts = Post.order('created_at DESC').find_all_by_user_id(current_user.id) %>
+
+    <% if !@posts.blank? %>
+        <% @posts.each do |post| %>
+          <tr>
+            <td><%= post.content %></td>
+            <td><%= current_user.first_name %> (me)</td>
+          </tr>
+        <% end %>
+    <%else%>
+        <tr>  
+          <td>You have not created any post yet.</td>
+        </tr>
+    <%end%>
+    <% @posts_follow.each do |post| %>
+      <% @post_user = User.find_by_id(post.user.id) %>
+
+      <tr>
+        <td><%= post.content %></td>
+        <td>(<%= @post_user.first_name %> <%= @post_user.last_name%>)</td>
+
+      </tr>
+    <% end %>
+</table>
